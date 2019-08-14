@@ -46,6 +46,12 @@ class PSPFile:
         self._comp_headers = None
         self._comp_data = None
 
+        try:
+            self.headers
+        except Exception:
+            raise IOError('Failed to load header from file "{}" - are you sure '
+                          'this is a PSP file?'.format(filename))
+
         if pos_unit is not None:
             m_unit = (vel_unit**2 * pos_unit / G).to(mass_scale_unit)
             t_unit = np.sqrt((pos_unit**3) / (G*m_unit)).to(time_scale_unit)
@@ -92,7 +98,7 @@ class PSPFile:
         head = np.fromfile(f, dtype=np.dtype((np.bytes_, infostringlen)),
                            count=1)
         head_normal = head[0].decode()
-        head_dict = yaml.load(head_normal)
+        head_dict = yaml.safe_load(head_normal)
 
         comp_data_pos = f.tell()  # byte position where component data begins
 
@@ -113,6 +119,7 @@ class PSPFile:
         data['nbodies'] = nbodies
         data['data_start'] = comp_data_pos
         data['data_end'] = comp_data_end
+        f.seek(comp_data_end)
 
         return data
 
