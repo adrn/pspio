@@ -15,7 +15,7 @@ import numpy as np
 import yaml
 
 
-class PSPReader:
+class PSPFile:
     """A Python reader for Phase-Space Protocol (PSP) files used by EXP.
 
     Parameters
@@ -42,9 +42,9 @@ class PSPReader:
             raise ValueError("If you specify a pos or vel unit, you "
                              "must specify both.")
 
-        # Start by reading the header:
-        self.comp_header = self._load_header()
-        self.comp_data = self._load_data()
+        # This are lazy-loaded as needed:
+        self._comp_headers = None
+        self._comp_data = None
 
         if pos_unit is not None:
             m_unit = (vel_unit**2 * pos_unit / G).to(mass_scale_unit)
@@ -53,6 +53,29 @@ class PSPReader:
         else:
             self._usys = None
 
+    # ------------------------------------------------------------------------
+    # Lazy-loaded attributes with component information - headers and data
+    #
+
+    @property
+    def headers(self):
+        if self._comp_headers is None:
+            self._comp_headers = self._load_headers()
+        return self._comp_headers
+
+    @property
+    def data(self):
+        if self._comp_data is None:
+            self._comp_data = self._load_data()
+        return self._comp_data
+
+    @property
+    def component_names(self):
+        return list(self.headers.keys())
+
+    # ------------------------------------------------------------------------
+    # Loader methods that actually dig in to the PSP file
+    #
 
     def _load_component_header(self, f, comp_idx):
         comp_pos = f.tell()  # byte position of this component
@@ -93,7 +116,7 @@ class PSPReader:
 
         return data
 
-    def _load_header(self):
+    def _load_headers(self):
         """Load the master header of the PSP file"""
 
         comp_header = dict()
@@ -177,7 +200,10 @@ class PSPReader:
 
         return comp_data
 
+    # ------------------------------------------------------------------------
     # Display:
+    #
+
     def __repr__(self):
         thing = ('<PSP {} bodies; {} components: {}>'
                  .format(self.nbodies, len(self.comp_header),
