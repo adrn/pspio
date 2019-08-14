@@ -192,7 +192,7 @@ class PSPFile:
         comp_data = dict()
 
         ndatabodies = 0
-        for name, hdr in self.comp_headers.items():
+        for name, hdr in self.headers.items():
             comp_data[name] = self._load_component_data(hdr)
             ndatabodies += len(comp_data[name])
 
@@ -206,9 +206,9 @@ class PSPFile:
 
     def __repr__(self):
         thing = ('<PSP {} bodies; {} components: {}>'
-                 .format(self.nbodies, len(self.comp_headers),
+                 .format(self.nbodies, len(self.headers),
                          ', '.join(['"{}"'.format(k)
-                                    for k in self.comp_headers.keys()])))
+                                    for k in self.headers.keys()])))
         return thing
 
     def __str__(self):
