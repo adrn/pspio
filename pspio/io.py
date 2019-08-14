@@ -10,7 +10,6 @@ written by Martin Weinberg.
 from astropy.constants import G
 import astropy.table as at
 import astropy.units as u
-from gala.units import UnitSystem
 import numpy as np
 import yaml
 
@@ -53,6 +52,7 @@ class PSPFile:
                           'this is a PSP file?'.format(filename))
 
         if pos_unit is not None:
+            from gala.units import UnitSystem
             m_unit = (vel_unit**2 * pos_unit / G).to(mass_scale_unit)
             t_unit = np.sqrt((pos_unit**3) / (G*m_unit)).to(time_scale_unit)
             self._usys = UnitSystem(t_unit, m_unit, pos_unit, vel_unit)
