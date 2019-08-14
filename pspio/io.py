@@ -78,7 +78,7 @@ class PSPFile:
     #
 
     def _load_component_header(self, f, comp_idx):
-        comp_pos = f.tell()  # byte position of this component
+        _ = f.tell()  # byte position of this component
 
         # TODO: if PSP changes, this will have to be altered
         if self._float_len == 4:
