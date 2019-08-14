@@ -205,10 +205,11 @@ class PSPFile:
     #
 
     def __repr__(self):
+        hdr = self.headers
         thing = ('<PSP {} bodies; {} components: {}>'
-                 .format(self.nbodies, len(self.headers),
+                 .format(self.nbodies, len(hdr),
                          ', '.join(['"{}"'.format(k)
-                                    for k in self.headers.keys()])))
+                                    for k in hdr.keys()])))
         return thing
 
     def __str__(self):
