@@ -38,7 +38,7 @@ class PSPFile:
         self.pos_unit = pos_unit
         self.vel_unit = vel_unit
         if ((pos_unit is None and vel_unit is not None) or
-            (vel_unit is None and pos_unit is not None)):
+                (vel_unit is None and pos_unit is not None)):
             raise ValueError("If you specify a pos or vel unit, you "
                              "must specify both.")
 
