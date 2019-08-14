@@ -159,7 +159,9 @@ class PSPReader:
 
         tbl = {}
         for i, name in enumerate(colnames):
-            tbl[name] = np.array(out['f{}'.format(i)][0])
+            tbl[name] = np.array(out['f{}'.format(i)][0], copy=True)
+
+        del out  # close the memmap instance
 
         return at.Table(tbl)
 
