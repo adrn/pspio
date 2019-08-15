@@ -144,7 +144,7 @@ class PSPFile:
 
             # reset to beginning and read current time
             f.seek(0)
-            time, = np.fromfile(f, dtype='<f8', count=1)
+            self.time, = np.fromfile(f, dtype='<f8', count=1)
             self._nbodies_tot, self._ncomp = np.fromfile(f, dtype=np.uint32,
                                                          count=2)
 
@@ -154,7 +154,6 @@ class PSPFile:
                 nbodies += data['nbodies']
 
         self.nbodies = nbodies
-        comp_header['time'] = time
 
         return comp_header
 
