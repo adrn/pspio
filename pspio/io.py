@@ -130,6 +130,9 @@ class PSPFile:
         nbodies = 0
 
         with open(self.filename, 'rb') as f:
+            # read the current time
+            time = np.fromfile(f, dtype='<f8',count=1)[0]
+
             # --- This code taken from psp_io.py ---
             f.seek(16)  # find magic number
             cmagic, = np.fromfile(f, dtype=np.uint32, count=1)
@@ -154,6 +157,7 @@ class PSPFile:
                 nbodies += data['nbodies']
 
         self.nbodies = nbodies
+        comp_header['time'] = time
 
         return comp_header
 
